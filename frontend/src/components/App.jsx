@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { UncontrolledDropdown, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle } from 'reactstrap';
 import axios from 'axios';
 
 import InferenceTag from './InferenceTags.jsx'
@@ -30,11 +30,11 @@ class App extends Component {
   
   render() {
     return (
-      <div>
+      <div className="text-center">
         <br/>
         <UncontrolledDropdown>
           <DropdownToggle caret color="primary">
-            Button Dropdown
+            Inferences Tags
           </DropdownToggle>
           <InferenceTag/>
         </UncontrolledDropdown>

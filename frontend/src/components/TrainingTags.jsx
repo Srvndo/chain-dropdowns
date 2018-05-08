@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { DropdownMenu } from 'reactstrap';
-import { Form, FormGroup, Label, Input } from 'reactstrap';
+import { DropdownMenu, Button } from 'reactstrap';
+import { Form } from 'reactstrap';
 
 import axios from 'axios';
 
@@ -18,29 +18,45 @@ class TrainingTags extends Component {
         this.state = {
             inference:props.inference,
             modifier: props.modifier,
-            training_tags: []
+            training_tags: [],
+            training_items: [],
+            submit: false
         }
+
+        this.submit = this.submit.bind(this);
+    }
+
+    submit = (sub) => {
+        let aux = this.state.training_items;
+        
+        aux.map(item => {
+            if (item.id === sub.item){
+                item = sub;
+            }
+        });
+
+        console.log(aux);
+        this.setState({ training_items: aux });
     }
 
     componentDidMount() {
-        let training = []
+        let training = [];
         axios.get('inference-to-tag/?inference=' + this.state.inference + '&modifier=' + this.state.modifier)
             .then(response => {
                 response.data.map(tags => {
                     training.push(
-                        <CheckboxTag checked={ tags.checked } 
-                            inference={ this.state.inference } 
-                            modifier={ this.state.modifier }
-                            tag={ tags.tag_id.tag }
-                        />
+                        <CheckboxTag inference_map={ tags } submit={ this.submit }/>
                     )
+                })
+
+                this.setState({
+                    training_tags: training,
+                    training_items: response.data
                 })
             })
             .catch(error => { console.log(error) })
 
-        this.setState({
-            training_tags: training
-        })
+        
     }
 
     render() {
@@ -49,6 +65,14 @@ class TrainingTags extends Component {
                 <Form>
                     { this.state.training_tags }
                 </Form>
+                <br/>
+                <div className="text-center">
+                    <Button color="warning" 
+                        size="lg" 
+                        block
+                    > Save 
+                    </Button>
+                </div>
             </DropdownMenu>
         );
     }

@@ -6,19 +6,24 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 class CheckboxTag extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            inference:props.inference,
-            modifier: props.modifier,
-            checked: props.checked,
-            tag: props.tag
+            inference_map: props.inference_map,
+            checked: props.inference_map.checked,
+            tag: props.inference_map.tag_id.tag
         }
 
         this.onChange = this.onChange.bind(this);
     }
 
     onChange = () => {
+        let aux = this.state.inference_map;
+        aux.checked = !this.state.checked;
+        this.props.submit(aux);
         this.setState({ checked: !this.state.checked});
+    }
+
+    submit = () => {
+        
     }
 
     render(){
