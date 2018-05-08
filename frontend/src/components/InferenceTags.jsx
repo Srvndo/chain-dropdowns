@@ -29,7 +29,7 @@ class InferenceTag extends Component {
                     <DropdownToggle caret color="success">
                         { infer.inference_tag }
                     </DropdownToggle>
-                    <TagModifier/>
+                    <TagModifier inference={ infer.id }/>
                 </UncontrolledDropdown>
                
             )

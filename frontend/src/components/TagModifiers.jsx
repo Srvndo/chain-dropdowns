@@ -14,7 +14,7 @@ class TagModifier extends Component {
         super(props);
 
         this.state = {
-            //inference: props.inference,
+            inference: props.inference,
             tagModifiers: []
         }
     }
@@ -33,7 +33,7 @@ class TagModifier extends Component {
                                 { mod.tag_modifier }
                             </DropdownToggle>
                             
-                                <TrainingTags/> 
+                                <TrainingTags inference={ this.state.inference } modifier={ mod.id}/> 
                             
                         </UncontrolledDropdown>
                     )

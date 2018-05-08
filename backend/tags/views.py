@@ -26,3 +26,18 @@ class TagModifiersViewSet(viewsets.ModelViewSet):
 class InferenceToTagMapViewSet(viewsets.ModelViewSet):
     queryset = models.InferenceToTagMap.objects.all()
     serializer_class = serializers.InferenceToTagMapSerializer
+
+    def get_queryset(self):
+        inference = self.request.query_params.get('inference')
+        modifier = self.request.query_params.get('modifier')
+
+        q1 =  models.InferenceToTagMap.objects.all()
+        queryset = q1.filter(mod_tag_id=modifier, inferenceTag_id=inference)
+
+        for inference in q1:
+            if inference in queryset:
+                setattr(inference, 'checked', True)
+            else:
+                setattr(inference, 'checked', False)
+
+        return q1

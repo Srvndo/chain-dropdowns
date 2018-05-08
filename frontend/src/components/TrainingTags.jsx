@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 
-import { UncontrolledDropdown, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { DropdownMenu } from 'reactstrap';
+import { Form, FormGroup, Label, Input } from 'reactstrap';
+
 import axios from 'axios';
+
+import CheckboxTag from './CheckboxItem.jsx'
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -12,19 +16,23 @@ class TrainingTags extends Component {
         super(props);
 
         this.state = {
+            inference:props.inference,
+            modifier: props.modifier,
             training_tags: []
         }
     }
 
     componentDidMount() {
         let training = []
-        axios.get('training-tags')
+        axios.get('inference-to-tag/?inference=' + this.state.inference + '&modifier=' + this.state.modifier)
             .then(response => {
                 response.data.map(tags => {
                     training.push(
-                        <DropdownItem>
-                            <h3>{ tags.tag }</h3>
-                        </DropdownItem>
+                        <CheckboxTag checked={ tags.checked } 
+                            inference={ this.state.inference } 
+                            modifier={ this.state.modifier }
+                            tag={ tags.tag_id.tag }
+                        />
                     )
                 })
             })
@@ -38,7 +46,9 @@ class TrainingTags extends Component {
     render() {
         return(
             <DropdownMenu>
-                { this.state.training_tags }
+                <Form>
+                    { this.state.training_tags }
+                </Form>
             </DropdownMenu>
         );
     }

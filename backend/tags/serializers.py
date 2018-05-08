@@ -19,6 +19,7 @@ class TagModifierSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class InferenceToTagMapSerializer(serializers.ModelSerializer):
+    checked = serializers.BooleanField()
     class Meta:
         model = models.InferenceToTagMap
         fields = '__all__'
