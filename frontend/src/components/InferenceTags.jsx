@@ -24,7 +24,6 @@ class InferenceTag extends Component {
         .then(response => {
           response.data.map(infer => {
             inferences.push(
-                
                 <UncontrolledDropdown direction="right">
                     <DropdownToggle caret color="success">
                         { infer.inference_tag }

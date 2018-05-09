@@ -22,21 +22,43 @@ class TrainingTags extends Component {
             training_items: [],
             submit: false
         }
-
+        
         this.submit = this.submit.bind(this);
+        this.save = this.save.bind(this);
     }
 
     submit = (sub) => {
         let aux = this.state.training_items;
+        sub.inference = this.state.inference
+        sub.modifier = this.state.modifier
         
         aux.map(item => {
-            if (item.id === sub.item){
+            if (item.id === sub.id){
                 item = sub;
             }
         });
 
-        console.log(aux);
         this.setState({ training_items: aux });
+    }
+
+    save = () => {
+        let data = [];
+        this.state.training_items.map(item => {
+            if(item.inference != null) {
+                data.push( item )
+            }
+        });
+        console.log(data);
+        axios.post('updater/', data)
+            .then(response => { 
+                if(response.data.Result) {
+                    alert("Save Successful");
+                }
+                else {
+                    alert("Error while Saving data. Check the data!")
+                }
+            })
+            .catch(error => { console.log(error) });
     }
 
     componentDidMount() {
@@ -61,7 +83,7 @@ class TrainingTags extends Component {
 
     render() {
         return(
-            <DropdownMenu>
+            <DropdownMenu className="p-2">
                 <Form>
                     { this.state.training_tags }
                 </Form>
@@ -70,6 +92,7 @@ class TrainingTags extends Component {
                     <Button color="warning" 
                         size="lg" 
                         block
+                        onClick={ this.save }
                     > Save 
                     </Button>
                 </div>

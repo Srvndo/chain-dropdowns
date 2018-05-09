@@ -9,7 +9,7 @@ class CheckboxTag extends Component {
         this.state = {
             inference_map: props.inference_map,
             checked: props.inference_map.checked,
-            tag: props.inference_map.tag_id.tag
+            tag: props.inference_map.tag
         }
 
         this.onChange = this.onChange.bind(this);
@@ -19,7 +19,10 @@ class CheckboxTag extends Component {
         let aux = this.state.inference_map;
         aux.checked = !this.state.checked;
         this.props.submit(aux);
-        this.setState({ checked: !this.state.checked});
+        this.setState({ 
+            checked: !this.state.checked,
+            inference_map: aux
+        });
     }
 
     submit = () => {
