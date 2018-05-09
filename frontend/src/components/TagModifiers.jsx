@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { UncontrolledDropdown, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu} from 'reactstrap';
 import axios from 'axios';
 
 import TrainingTags from './TrainingTags.jsx';
@@ -25,10 +25,8 @@ class TagModifier extends Component {
 
         axios.get('tag-modifier')
             .then(response => {
-                response.data.map(mod => {
-                    modifiers.push(
-                        
-                        <UncontrolledDropdown direction="right">
+                response.data.map((mod, index) => modifiers.push(
+                        <UncontrolledDropdown key={index} direction="right">
                             <DropdownToggle caret color="info">
                                 { mod.tag_modifier }
                             </DropdownToggle>
@@ -37,7 +35,7 @@ class TagModifier extends Component {
                             
                         </UncontrolledDropdown>
                     )
-                })
+                )
             })
             .catch(error => { console.log(error) })
         

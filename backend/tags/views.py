@@ -10,21 +10,24 @@ from . import models
 from . import serializers
 
 
-# Create your views here.
 class IndexView(TemplateView):
     template_name = 'base.html'
+
 
 class TrainingTagsViewSet(viewsets.ModelViewSet):
     queryset = models.TrainingTags.objects.all()
     serializer_class = serializers.TrainingTagSerializer
 
+
 class InferenceTagsViewSet(viewsets.ModelViewSet):
     queryset = models.InferenceTags.objects.all()
     serializer_class = serializers.InferenceTagSerializer
 
+
 class TagModifiersViewSet(viewsets.ModelViewSet):
     queryset = models.TagModifiers.objects.all()
     serializer_class = serializers.TagModifierSerializer
+
 
 class InferenceToTagMapViewSet(viewsets.ModelViewSet):
     queryset = models.TrainingTags.objects.all()
@@ -36,13 +39,18 @@ class InferenceToTagMapViewSet(viewsets.ModelViewSet):
 
         training_tags = models.TrainingTags.objects.all()
        
-        for obj in training_tags:
-            if len(models.InferenceToTagMap.objects.all().filter(tag_id=obj.pk, mod_tag_id=modifier, inferenceTag_id=inference)) > 0:
-                setattr(obj, 'checked', True)
+        for tag in training_tags:
+            if models.InferenceToTagMap.objects.filter(
+                    tag_id=tag.pk, 
+                    mod_tag_id=modifier, 
+                    inferenceTag_id=inference
+                ).count() > 0:
+                setattr(tag, 'checked', True)
             else:
-                setattr(obj, 'checked', False)
+                setattr(tag, 'checked', False)
 
         return training_tags
+
 
 class InferenceToTagMapUpdater(views.APIView):
     authentication_classes = (authentication.TokenAuthentication,)
@@ -55,31 +63,24 @@ class InferenceToTagMapUpdater(views.APIView):
             inference_id = item['inference']
             modifier_id = item['modifier']
             checked = item['checked']
+            
+            if checked:
+                training_tags = models.TrainingTags.objects.get(pk=tag_id)
+                mod_tag = models.TagModifiers.objects.get(pk=modifier_id)
+                inferencetag = models.InferenceTags.objects.get(pk=inference_id)
 
-            if inference_id is not None and modifier_id is not None:
-                if checked:
-                    try:
-                        training_tags = models.TrainingTags.objects.get(pk=tag_id)
-                        mod_tag = models.TagModifiers.objects.get(pk=modifier_id)
-                        inferencetag = models.InferenceTags.objects.get(pk=inference_id)
-
-                        inference_tag_map = models.InferenceToTagMap(
-                            tag_id=training_tags, 
-                            mod_tag_id=mod_tag, 
-                            inferenceTag_id=inferencetag
-                        )
-                        inference_tag_map.save()
-                    except:
-                        return Response({'Result': False})
-                else:
-                    try:
-                        deleted_obj = models.InferenceToTagMap.objects.all().filter(
-                            tag_id=tag_id, 
-                            mod_tag_id=modifier_id, 
-                            inferenceTag_id=inference_id
-                        ).delete()
-                    except:
-                        return Response({'Result': False})
+                inference_tag_map = models.InferenceToTagMap.objects.create(
+                    tag_id=training_tags, 
+                    mod_tag_id=mod_tag, 
+                    inferenceTag_id=inferencetag
+                )
+                inference_tag_map.save()
+            else:
+                deleted_obj = models.InferenceToTagMap.objects.get(
+                    tag_id=tag_id, 
+                    mod_tag_id=modifier_id, 
+                    inferenceTag_id=inference_id
+                ).delete()
         
         return Response({'Result': True})
 

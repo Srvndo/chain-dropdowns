@@ -36,6 +36,7 @@ class TrainingTags extends Component {
             if (item.id === sub.id){
                 item = sub;
             }
+            return null;
         });
 
         this.setState({ training_items: aux });
@@ -47,8 +48,8 @@ class TrainingTags extends Component {
             if(item.inference != null) {
                 data.push( item )
             }
+            return null;
         });
-        console.log(data);
         axios.post('updater/', data)
             .then(response => { 
                 if(response.data.Result) {
@@ -65,11 +66,10 @@ class TrainingTags extends Component {
         let training = [];
         axios.get('inference-to-tag/?inference=' + this.state.inference + '&modifier=' + this.state.modifier)
             .then(response => {
-                response.data.map(tags => {
-                    training.push(
-                        <CheckboxTag inference_map={ tags } submit={ this.submit }/>
+                response.data.map((tags, index) => training.push(
+                        <CheckboxTag key={index} inference_map={ tags } submit={ this.submit }/>
                     )
-                })
+                )
 
                 this.setState({
                     training_tags: training,

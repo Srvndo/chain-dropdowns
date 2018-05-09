@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.db import models
 
-# Create your models here.
+
 class TrainingTags(models.Model):
-    tag = models.CharField(max_length=50, unique=True, null=False, blank=False)
+    tag = models.CharField(max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Training Tag'
@@ -12,8 +12,9 @@ class TrainingTags(models.Model):
     def __str__(self):
         return self.tag
 
+
 class InferenceTags(models.Model):
-    inference_tag = models.CharField(max_length=50, unique=True, null=False, blank=False)
+    inference_tag = models.CharField(max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Inference Tag'
@@ -22,8 +23,9 @@ class InferenceTags(models.Model):
     def __str__(self):
         return self.inference_tag
     
+
 class TagModifiers(models.Model):
-    tag_modifier = models.CharField(max_length=50, unique=True, null=False, blank=False)
+    tag_modifier = models.CharField(max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Tag Modifier'
@@ -31,6 +33,7 @@ class TagModifiers(models.Model):
 
     def __str__(self):
         return self.tag_modifier
+
 
 class InferenceToTagMap(models.Model):
     tag_id = models.ForeignKey(TrainingTags, on_delete=None)

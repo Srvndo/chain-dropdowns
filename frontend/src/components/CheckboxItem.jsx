@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Form, FormGroup, Label, Input } from 'reactstrap';
+import {FormGroup, Label, Input } from 'reactstrap';
 
 
 class CheckboxTag extends Component {

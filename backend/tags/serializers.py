@@ -2,8 +2,10 @@ from rest_framework import serializers
 
 from . import models
 
+
 class TrainingTagSerializer(serializers.ModelSerializer):
     checked = serializers.BooleanField()
+    
     class Meta:
         model = models.TrainingTags
         fields = '__all__'
@@ -14,10 +16,12 @@ class InferenceTagSerializer(serializers.ModelSerializer):
         model = models.InferenceTags
         fields = '__all__'
 
+
 class TagModifierSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TagModifiers
         fields = '__all__'
+
 
 class InferenceToTagMapSerializer(serializers.Serializer):
     id = serializers.IntegerField()

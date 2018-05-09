@@ -28,7 +28,6 @@ router.register(r'training-tags', views.TrainingTagsViewSet, base_name='training
 router.register(r'inference-tags', views.InferenceTagsViewSet, base_name='inference-tags')
 router.register(r'tag-modifier', views.TagModifiersViewSet, base_name='tag-modifier')
 router.register(r'inference-to-tag', views.InferenceToTagMapViewSet, base_name='inference-to-tag')
-#router.register(r'inference-handler', views.InferenceToTagMapUpdater, base_name='inference-handler')
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='home'),
